@@ -1,7 +1,18 @@
 // 🎮 RHL TOURNAMENT - Discord Integration
 // Handles Discord webhook notifications
 
-const fetch = require('node-fetch');
+// Safe fetch import with fallback
+let fetchFunction;
+try {
+    fetchFunction = require('node-fetch');
+    // Test if fetch is available
+    if (typeof fetchFunction !== 'function') {
+        fetchFunction = null;
+    }
+} catch (error) {
+    console.log('⚠️ node-fetch not available, Discord webhooks disabled');
+    fetchFunction = null;
+}
 
 class Discord {
     constructor(bot) {
@@ -26,8 +37,8 @@ class Discord {
         }
 
         // Production environment check - disable Discord if fetch is unavailable
-        if (typeof fetch === 'undefined') {
-            console.log('⚠️ Discord webhook disabled - running in production environment without fetch');
+        if (!fetchFunction) {
+            console.log('⚠️ Discord webhook disabled - fetch not available in this environment');
             return false;
         }
 
@@ -74,9 +85,9 @@ class Discord {
 
     async sendWebhookImmediate(embed) {
         try {
-            // Check if we're in production environment without fetch
-            if (typeof fetch === 'undefined') {
-                console.log('⚠️ Discord webhook skipped - fetch not available in production environment');
+            // Production environment safety check
+            if (!fetchFunction) {
+                console.log('⚠️ Discord webhook disabled - fetch unavailable');
                 return false;
             }
 
@@ -92,7 +103,7 @@ class Discord {
                 }
             };
 
-            const response = await fetch(this.webhookUrl, {
+            const response = await fetchFunction(this.webhookUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
