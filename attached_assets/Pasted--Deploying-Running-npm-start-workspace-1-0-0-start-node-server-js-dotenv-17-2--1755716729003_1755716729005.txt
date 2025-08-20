@@ -1,0 +1,91 @@
+ ==> Deploying...
+==> Running 'npm start'
+> workspace@1.0.0 start
+> node server.js
+[dotenv@17.2.1] injecting env (0) from .env -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+[dotenv@17.2.1] injecting env (0) from .env -- tip: ⚙️  override existing env vars with { override: true }
+⚙️ Bot Configuration:
+   Room Name: 🎮 RHL TOURNAMENT 🎮
+   Max Players: 16
+   Public: true
+   Location: EG
+   Discord Webhook: ✅ Configured
+   Discord Invite: https://discord.gg/R3Rtwqqhwm
+🚀 Server running on port 10000
+📍 Health check: http://localhost:10000/
+🎮 Initializing Haxball bot...
+🎮 Starting RHL Tournament Bot...
+🌐 Loading Haxball Headless API...
+❌ Failed to load Haxball API: fetch is not a function
+🔧 Using mock room for development...
+🎭 Creating mock Haxball room for development...
+✅ Room initialized successfully
+🔧 Setting up event handlers...
+✅ Event handlers set up successfully
+⏰ Starting background tasks...
+✅ Background tasks started
+❌ Failed to send Discord webhook: TypeError: fetch is not a function
+    at Discord.sendWebhookImmediate (/opt/render/project/src/src/discord.js:83:36)
+    at Discord.processWebhookQueue (/opt/render/project/src/src/discord.js:54:44)
+    at /opt/render/project/src/src/discord.js:31:18
+    at new Promise (<anonymous>)
+    at Discord.sendWebhook (/opt/render/project/src/src/discord.js:29:16)
+    at HaxballBot.start (/opt/render/project/src/src/haxball-bot.js:91:32)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+🏆 🎮 RHL TOURNAMENT 🎮 is now live!
+     ==> Your service is live 🎉
+     ==> 
+     ==> ///////////////////////////////////////////////////////////
+     ==> 
+     ==> Available at your primary URL https://zero00000000-ciaz.onrender.com
+     ==> 
+     ==> ///////////////////////////////////////////////////////////
+     Deploy cancelled
+📢 [MOCK] 📢 Join our Discord server: https://discord.gg/R3Rtwqqhwm
+     ==> Deploying...
+   Public: true
+   Location: EG
+   Discord Webhook: ✅ Configured
+   Discord Invite: https://discord.gg/R3Rtwqqhwm
+🚀 Server running on port 10000
+📍 Health check: http://localhost:10000/
+🎮 Initializing Haxball bot...
+🎮 Starting RHL Tournament Bot...
+🌐 Loading Haxball Headless API...
+     ==> Your service is live 🎉
+     ==> 
+     ==> ///////////////////////////////////////////////////////////
+     ==> 
+     ==> Available at your primary URL https://zero00000000-ciaz.onrender.com
+     ==> 
+     ==> ///////////////////////////////////////////////////////////
+❌ Failed to start bot: Error: Timeout loading Haxball API
+🔄 Retrying in 30 seconds...
+    at Timeout._onTimeout (/opt/render/project/src/src/haxball-bot.js:151:28)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+💥 Unhandled Rejection at: Promise {
+  <rejected> Error: Timeout loading Haxball API
+      at Timeout._onTimeout (/opt/render/project/src/src/haxball-bot.js:151:28)
+      at listOnTimeout (node:internal/timers:588:17)
+      at process.processTimers (node:internal/timers:523:7)
+} reason: Error: Timeout loading Haxball API
+    at Timeout._onTimeout (/opt/render/project/src/src/haxball-bot.js:151:28)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+🎮 Starting RHL Tournament Bot...
+🌐 Loading Haxball Headless API...
+❌ Failed to start bot: Error: Timeout loading Haxball API
+    at Timeout._onTimeout (/opt/render/project/src/src/haxball-bot.js:151:28)
+🔄 Retrying in 30 seconds...
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
+💥 Unhandled Rejection at: Promise {
+  <rejected> Error: Timeout loading Haxball API
+      at Timeout._onTimeout (/opt/render/project/src/src/haxball-bot.js:151:28)
+      at listOnTimeout (node:internal/timers:588:17)
+      at process.processTimers (node:internal/timers:523:7)
+} reason: Error: Timeout loading Haxball API
+    at Timeout._onTimeout (/opt/render/project/src/src/haxball-bot.js:151:28)
+    at listOnTimeout (node:internal/timers:588:17)
+    at process.processTimers (node:internal/timers:523:7)
