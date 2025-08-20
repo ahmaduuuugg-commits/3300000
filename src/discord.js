@@ -68,6 +68,7 @@ class Discord {
 
     async sendWebhookImmediate(embed) {
         try {
+
             // Enhance embed with bot info
             const enhancedEmbed = {
                 ...embed,
@@ -80,8 +81,7 @@ class Discord {
                 }
             };
 
-            const nodeFetch = require('node-fetch');
-            const response = await nodeFetch(this.webhookUrl, {
+            const response = await fetch(this.webhookUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
