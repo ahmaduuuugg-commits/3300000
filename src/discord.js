@@ -25,11 +25,7 @@ class Discord {
             return false;
         }
 
-        // Check if fetch is available (production compatibility)
-        if (typeof fetch === 'undefined') {
-            console.log('⚠️ Discord webhook disabled - fetch not available in production environment');
-            return false;
-        }
+
 
         // Add to queue to handle rate limiting
         return new Promise((resolve) => {
@@ -87,14 +83,7 @@ class Discord {
                 }
             };
 
-            // Use dynamic require for production compatibility
-            const nodeFetch = require('node-fetch');
-            if (!nodeFetch || typeof nodeFetch !== 'function') {
-                console.log('⚠️ Discord webhook disabled - node-fetch not available');
-                return false;
-            }
-
-            const response = await nodeFetch(this.webhookUrl, {
+            const response = await fetch(this.webhookUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
