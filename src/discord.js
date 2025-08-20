@@ -81,6 +81,11 @@ class Discord {
                 }
             };
 
+            if (typeof fetch === 'undefined') {
+                console.log('⚠️ Discord webhook disabled - fetch not available in production');
+                return false;
+            }
+
             const response = await fetch(this.webhookUrl, {
                 method: 'POST',
                 headers: {
