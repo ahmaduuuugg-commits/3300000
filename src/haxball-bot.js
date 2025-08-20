@@ -130,69 +130,69 @@ class HaxballBot {
         console.log('🌐 Loading Haxball Headless API...');
         
         try {
-            // Use puppeteer-like approach to load Haxball API
+            // Improved JSDOM setup with better Node.js compatibility
             const { JSDOM } = require('jsdom');
-            const fetch = require('node-fetch');
+            const WebSocket = require('ws');
+            const XMLHttpRequest = require('xhr2');
             
-            // Create a more complete DOM environment
-            const dom = new JSDOM(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="utf-8">
-                    <title>Haxball Headless</title>
-                </head>
-                <body>
-                    <script>
-                        // Simulate browser globals that Haxball might need
-                        window.WebSocket = require('ws');
-                        window.XMLHttpRequest = require('xhr2');
-                        
-                        // Load Haxball API
-                        const script = document.createElement('script');
-                        script.src = 'https://www.haxball.com/rs/RoomHost.js?token=${this.config.HAXBALL_TOKEN}';
-                        script.onload = function() {
-                            console.log('✅ Haxball script loaded');
-                        };
-                        document.head.appendChild(script);
-                    </script>
-                </body>
-                </html>
-            `, {
+            // Create a more compatible DOM environment
+            const dom = new JSDOM(`<!DOCTYPE html><html><head></head><body></body></html>`, {
                 runScripts: "dangerously",
                 resources: "usable",
                 pretendToBeVisual: true,
-                url: "https://www.haxball.com/"
+                url: "https://www.haxball.com/",
+                beforeParse(window) {
+                    // Setup Node.js globals for Haxball compatibility
+                    window.WebSocket = WebSocket;
+                    window.XMLHttpRequest = XMLHttpRequest;
+                    window.fetch = require('node-fetch');
+                    
+                    // Add require function to global scope
+                    window.require = require;
+                    window.global = window;
+                    window.process = process;
+                }
             });
-
-            // Set up WebSocket and other required globals
-            dom.window.WebSocket = require('ws');
             
-            // Wait for HBInit to be available with shorter timeout
+            const { window } = dom;
+            
+            // Load the Haxball script with proper error handling
             return new Promise((resolve, reject) => {
-                const timeout = setTimeout(() => {
-                    console.log('⚠️ Haxball API timeout - using production-ready mock');
-                    resolve(this.createProductionMockHBInit());
-                }, 10000); // Reduced to 10 seconds
+                const script = window.document.createElement('script');
+                script.src = `https://www.haxball.com/rs/RoomHost.js?token=${this.config.HAXBALL_TOKEN}`;
                 
-                const checkHBInit = () => {
-                    if (dom.window.HBInit) {
-                        clearTimeout(timeout);
-                        console.log('✅ Haxball API loaded successfully');
-                        resolve(dom.window.HBInit);
+                script.onload = () => {
+                    console.log('✅ Haxball script loaded successfully');
+                    if (window.HBInit) {
+                        resolve(window.HBInit);
                     } else {
-                        setTimeout(checkHBInit, 200);
+                        console.log('⚠️ HBInit not found after script load, using mock');
+                        resolve(this.createProductionMockHBInit());
                     }
                 };
                 
-                checkHBInit();
+                script.onerror = (error) => {
+                    console.log('⚠️ Failed to load Haxball script, using production mock');
+                    resolve(this.createProductionMockHBInit());
+                };
+                
+                // Timeout fallback
+                const timeout = setTimeout(() => {
+                    console.log('⚠️ Haxball API timeout - using production mock');
+                    resolve(this.createProductionMockHBInit());
+                }, 15000);
+                
+                script.onload = () => {
+                    clearTimeout(timeout);
+                    script.onload();
+                };
+                
+                window.document.head.appendChild(script);
             });
             
         } catch (error) {
-            console.error('❌ Failed to load Haxball API:', error.message);
+            console.error('❌ JSDOM setup failed:', error.message);
             console.log('🔧 Using production-ready mock room...');
-            
-            // Return a more complete mock for production
             return this.createProductionMockHBInit();
         }
     }
