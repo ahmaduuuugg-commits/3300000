@@ -87,18 +87,22 @@ class HaxballBot {
             // Start background tasks
             this.startBackgroundTasks();
             
-            // Send initial Discord notification
-            await this.discord.sendWebhook({
-                title: "🎮 RHL TOURNAMENT Room Started",
-                description: "Tournament room is now online and ready for players!",
-                color: 0x00ff00,
-                timestamp: new Date().toISOString(),
-                fields: [
-                    { name: "Room Name", value: this.config.ROOM_CONFIG.roomName, inline: true },
-                    { name: "Max Players", value: this.config.ROOM_CONFIG.maxPlayers.toString(), inline: true },
-                    { name: "Location", value: "Egypt 🇪🇬", inline: true }
-                ]
-            });
+            // Send initial Discord notification (only if available)
+            try {
+                await this.discord.sendWebhook({
+                    title: "🎮 RHL TOURNAMENT Room Started",
+                    description: "Tournament room is now online and ready for players!",
+                    color: 0x00ff00,
+                    timestamp: new Date().toISOString(),
+                    fields: [
+                        { name: "Room Name", value: this.config.ROOM_CONFIG.roomName, inline: true },
+                        { name: "Max Players", value: this.config.ROOM_CONFIG.maxPlayers.toString(), inline: true },
+                        { name: "Location", value: "Egypt 🇪🇬", inline: true }
+                    ]
+                });
+            } catch (discordError) {
+                console.log('⚠️ Discord notification skipped:', discordError.message);
+            }
 
             console.log(`🏆 ${this.config.ROOM_CONFIG.roomName} is now live!`);
             return this;
