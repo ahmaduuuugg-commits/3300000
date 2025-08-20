@@ -133,7 +133,13 @@ class HaxballBot {
             // Improved JSDOM setup with better Node.js compatibility
             const { JSDOM } = require('jsdom');
             const WebSocket = require('ws');
-            const XMLHttpRequest = require('xhr2');
+            let XMLHttpRequest;
+            try {
+                XMLHttpRequest = require('xhr2');
+            } catch (error) {
+                console.log('⚠️ xhr2 not available, continuing without it');
+                XMLHttpRequest = null;
+            }
             
             // Create a more compatible DOM environment
             const dom = new JSDOM(`<!DOCTYPE html><html><head></head><body></body></html>`, {
@@ -144,13 +150,23 @@ class HaxballBot {
                 beforeParse(window) {
                     // Setup Node.js globals for Haxball compatibility
                     window.WebSocket = WebSocket;
-                    window.XMLHttpRequest = XMLHttpRequest;
-                    window.fetch = require('node-fetch');
+                    if (XMLHttpRequest) {
+                        window.XMLHttpRequest = XMLHttpRequest;
+                    }
+                    try {
+                        window.fetch = require('node-fetch');
+                    } catch (e) {
+                        console.log('⚠️ node-fetch not available in beforeParse');
+                    }
                     
-                    // Add require function to global scope
-                    window.require = require;
-                    window.global = window;
-                    window.process = process;
+                    // Add require function to global scope safely
+                    try {
+                        window.require = require;
+                        window.global = window;
+                        window.process = process;
+                    } catch (e) {
+                        console.log('⚠️ Could not setup global variables');
+                    }
                 }
             });
             
