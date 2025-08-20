@@ -87,12 +87,14 @@ class Discord {
                 }
             };
 
-            if (typeof fetch === 'undefined') {
-                console.log('⚠️ Discord webhook disabled - fetch not available in production');
+            // Use dynamic require for production compatibility
+            const nodeFetch = require('node-fetch');
+            if (!nodeFetch || typeof nodeFetch !== 'function') {
+                console.log('⚠️ Discord webhook disabled - node-fetch not available');
                 return false;
             }
 
-            const response = await fetch(this.webhookUrl, {
+            const response = await nodeFetch(this.webhookUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
