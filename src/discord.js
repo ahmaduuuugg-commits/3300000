@@ -25,6 +25,12 @@ class Discord {
             return false;
         }
 
+        // Check if fetch is available (production compatibility)
+        if (typeof fetch === 'undefined') {
+            console.log('⚠️ Discord webhook disabled - fetch not available in production environment');
+            return false;
+        }
+
         // Add to queue to handle rate limiting
         return new Promise((resolve) => {
             this.webhookQueue.push({ embed, resolve });
