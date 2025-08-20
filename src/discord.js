@@ -25,7 +25,11 @@ class Discord {
             return false;
         }
 
-
+        // Production environment check - disable Discord if fetch is unavailable
+        if (typeof fetch === 'undefined') {
+            console.log('⚠️ Discord webhook disabled - running in production environment without fetch');
+            return false;
+        }
 
         // Add to queue to handle rate limiting
         return new Promise((resolve) => {
