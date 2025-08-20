@@ -70,6 +70,11 @@ class Discord {
 
     async sendWebhookImmediate(embed) {
         try {
+            // Check if we're in production environment without fetch
+            if (typeof fetch === 'undefined') {
+                console.log('⚠️ Discord webhook skipped - fetch not available in production environment');
+                return false;
+            }
 
             // Enhance embed with bot info
             const enhancedEmbed = {
