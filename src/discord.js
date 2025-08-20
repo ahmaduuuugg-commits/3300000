@@ -80,7 +80,8 @@ class Discord {
                 }
             };
 
-            const response = await fetch(this.webhookUrl, {
+            const nodeFetch = require('node-fetch');
+            const response = await nodeFetch(this.webhookUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
